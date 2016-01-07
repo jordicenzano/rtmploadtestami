@@ -1,0 +1,51 @@
+{
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "access_key": "{{user `aws_access_key`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "region": "us-west-2",
+      "ami_regions": [
+        "us-west-2"
+      ],
+      "source_ami": "ami-f0091d91",
+      "instance_type": "c3.xlarge",
+      "ssh_username": "ec2-user",
+      "ami_name": "alive-rtmploadtest-{{isotime | clean_ami_name}}-{{timestamp}}-ebs",
+      "launch_block_device_mappings": [
+        {
+          "device_name": "/dev/xvda",
+          "volume_type": "gp2",
+          "volume_size": "8",
+          "delete_on_termination": "true"
+        }
+      ],
+      "ssh_timeout": "5m",
+      "security_group_ids": [ "image_creation" ],
+      "user_data_file": "enable_sudo_tty.sh"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "scripts": [
+        "wait.sh",
+        "install_base.sh"
+        ]
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "download_docker.sh"
+      ],
+      "execute_command": "chmod +x {{ .Path }}; sudo bash -c '{{ .Vars }} {{ .Path }}'"
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "install_web.sh",
+        "cleanup.sh"
+        ]
+    }
+  ]
+}

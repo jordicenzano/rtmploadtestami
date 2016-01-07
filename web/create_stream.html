@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+function createRTMPstream() {
+  var dest = "/cgi-bin/create-stream.rb"
+  var url = document.getElementById('inputDestRTMPUrl').value;
+  var media = document.getElementById('inputMedia').value;
+
+  var urlParam = "url=" + encodeURIComponent(url);
+  var mediaParam = "media=" + encodeURIComponent(media);
+
+  var urlAndQS = dest + "?" + urlParam + "&" + mediaParam;
+
+  console.log("QS:" + urlAndQS);
+
+  location = urlAndQS;
+
+  return false;
+}
+
+</script>
+<meta charset="UTF-8">
+<title>Create RTMP stream</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<style type="text/css">
+    .bs-example{
+        margin: 20px;
+    }
+</style>
+</head>
+<body>
+<div class="bs-example">
+    <div class="form-group">
+        <label for="inputDestRTMPUrl">RTMP destination URL</label>
+        <input type="url" class="form-control" id="inputDestRTMPUrl" placeholder="rtmp://login:pass@server.com:1935/path/stream">
+    </div>
+    <div class="form-group">
+        <label for="inputMedia">Media to stream</label>
+        <select class="form-control" id="inputMedia">
+            <option>auto240p30@500k</option>
+            <option>auto720p30@2M</option>
+            <option>auto720p60@3M</option>
+            <option>auto1080p30@3M</option>
+            <option>auto1080p60@4M</option>
+        </select>
+    </div>
+    <button onclick="createRTMPstream()" class="btn btn-primary">Create Stream</button>
+</div>
+</body>
+</html>
